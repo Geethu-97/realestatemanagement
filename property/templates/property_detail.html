@@ -1,0 +1,57 @@
+<!-- myapp/templates/myapp/property_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}{{ property.name }} Details{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>{{ property.name }} Details</h1>
+
+        <div class="card my-4">
+            <!-- Property details -->
+            <div class="card-body">
+                <h5 class="card-title">{{ property.name }}</h5>
+                <p class="card-text">{{ property.address }}<br>
+                {{ property.location }}</p>
+                <p class="card-text">Features: {{ property.features }}</p>
+            </div>
+        </div>
+
+        <!-- Search bar for units -->
+        <form method="get" action="{% url 'property_detail' property.id %}" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="unit_search" class="form-control" placeholder="Search units">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
+
+        {% if units %}
+            <h2>Unit Details</h2>
+            <div class="row">
+                {% for unit in units %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ unit.get_unit_type_display }}</h5>
+                                <p class="card-text">Rent Cost: Rs {{ unit.rent_cost }}</p>
+                                {% if unit.lease_set.exists %}
+                                    {% with tenant=unit.lease_set.first.tenant %}
+                                        <p class="card-text"><strong>Occupied by:</strong> <a href="{% url 'tenant_profile' tenant.id %}">{{ tenant.name }}</a></p>
+                                    {% endwith %}
+                                {% else %}
+                                    <p class="card-text"><em>Vacant</em></p>
+                                {% endif %}
+                                <!-- Add more unit details as needed -->
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No unit details available.</p>
+        {% endif %}
+    </div>
+    <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
+{% endblock %}

@@ -1,0 +1,39 @@
+<!-- myapp/templates/myapp/home.html -->
+{% extends 'base.html' %}
+
+{% load static %} <!-- Uncomment this line -->
+
+{% block title %}Real Estate Home Page{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Welcome to Our Real Estate Website!</h1>
+
+        <form method="GET" action="{% url 'home' %}" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Search for properties">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="row">
+            {% for property in properties %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ property.name }}</h5>
+                            <p class="card-text">{{ property.address }}<br>
+                            {{ property.location }}</p>
+                            <!-- Add more property details as needed -->
+
+                            <!-- Link to the property details page -->
+                            <a href="{% url 'property_detail' property.id %}" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,21 @@
+<!-- myapp/templates/myapp/tenant_list.html -->
+{% extends 'base_tenant.html' %}
+
+{% block title %}Tenant List{% endblock %}
+
+{% block content %}
+    <h1 class="mt-4 mb-4">Tenant List</h1>
+    <div class="row">
+        {% for tenant in tenants %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ tenant.name }}</h5>
+                        <p class="card-text">{{ tenant.address }}</p>
+                        <a href="{% url 'tenant_profile' tenant.id %}" class="btn btn-primary">View Profile</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

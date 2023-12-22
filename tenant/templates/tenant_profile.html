@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Tenant Profile{% endblock %}</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h2, h4 {
+            color: #333;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #fff;
+            background-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .document-proof {
+            margin-top: 20px;
+        }
+
+        .document-proof img {
+            max-width: 100%;
+            max-height: 300px;  /* Set a maximum height if needed */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Tenant Profile</h1>
+    </header>
+
+    <main>
+        {% block content %}
+            <h2>Profile</h2>
+            <p><strong>Name:</strong> {{ tenant.name }}</p>
+            <p><strong>Address:</strong> {{ tenant.address }}</p>
+
+            <h2>Document Proofs</h2>
+            {% if tenant.document_proof %}
+                <div class="document-proof">
+                    <img src="{{ tenant.document_proof.url }}" alt="Document Proof">
+                    <p><a href="{{ tenant.document_proof.url }}" target="_blank">View Document</a></p>
+                </div>
+            {% else %}
+                <p>No document proof uploaded for this tenant.</p>
+            {% endif %}
+
+            <h4>Units Owned</h4>
+            {% if leases %}
+                <ol>
+                    {% for lease in leases %}
+                        <li>
+                            <p>
+                                <b>Unit Id:</b> {{ lease.unit.unit_number }}<br>
+                                Agreement End Date: {{ lease.agreement_end_date }}<br>
+                                Monthly Rent Date: {{ lease.monthly_rent_date }}<br>
+                                Rent Cost: {{ lease.unit.rent_cost}}<br>
+                                Type: {{lease.unit.get_unit_type_display}}
+                            </p>
+                        </li>
+                        <!-- Add more unit details as needed -->
+                    {% endfor %}
+                </ol>
+            {% else %}
+                <p>N/A</p>
+            {% endif %}
+            <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
+        {% endblock %}
+    </main>
+
+</body>
+</html>
